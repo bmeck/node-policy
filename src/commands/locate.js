@@ -1,5 +1,6 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
+const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -11,11 +12,12 @@ class LocateCommand extends Command {
     const policyFilepath = path.resolve(flags.policy);
     try {
       await access(policyFilepath, fs.constants.W_OK);
+      const msg = `policy file ${chalk.bold(policyFilepath)} is writable`;
       if (flags.strict) {
-        console.error('error: policy file is writable');
+        console.error(`${chalk.red('error')}: ${msg}`);
         process.exit(1);
       } else {
-        console.error('warning: policy file is writable');
+        console.error(`${chalk.yellow('warning')}: ${msg}`);
       }
     } catch (e) {}
     console.log(policyFilepath);

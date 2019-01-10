@@ -1,5 +1,6 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
+const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -40,6 +41,7 @@ class IntegrityAddCommand extends Command {
     if (!policy.resources) {
       policy.resources = {};
     }
+    let numAdditions = 0;
     for (const entry of entries) {
       const real = entry.symlink ? await realpath(entry.path) : entry.path;
       const realURL = pathToFileURL(real);
@@ -69,6 +71,7 @@ class IntegrityAddCommand extends Command {
             }
           }
           if (!alreadyExists) {
+            numAdditions++;
             if (!seen.has(algorithm)) {
               seen.set(algorithm, new Set());
             }
@@ -95,6 +98,7 @@ class IntegrityAddCommand extends Command {
       }
     }
     await writeFile(policyFilepath, JSON.stringify(policy, null, 2));
+    console.error(`${chalk.green(numAdditions)} integrity values added to ${chalk.bold(policyFilepath)}`);
   }
 }
 IntegrityAddCommand.strict = false;

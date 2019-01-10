@@ -1,5 +1,6 @@
 'use strict';
 const {Command} = require('@oclif/command');
+const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -18,6 +19,7 @@ class MoveCommand extends Command {
     const desinationFilepath = path.resolve(args.DESTINATION);
     const destinationLocation = new URL(pathToFileURL(desinationFilepath).href);
     const policy = JSON.parse(await readFile(policyFilepath, 'utf8'));
+    let numRewrittenPaths = 0;
     if (policy && typeof policy === 'object' && policy.resources) {
       for (const urlString of Object.keys(policy.resources)) {
         try {
@@ -29,12 +31,19 @@ class MoveCommand extends Command {
           const newURLString = relativeURLString(
             destinationLocation,
             resourceLocation);
-          policy.resources[newURLString] = policy.resources[urlString];
-          delete policy.resources[urlString];
+          if (newURLString !== urlString) {
+            numRewrittenPaths++;
+            policy.resources[newURLString] = policy.resources[urlString];
+            delete policy.resources[urlString];
+          }
         }
       }
     }
-    await writeFile(args.DESTINATION, JSON.stringify(policy, null, 2));
+    await writeFile(desinationFilepath, JSON.stringify(policy, null, 2));
+    console.error(`moved ${chalk.dim(policyFilepath)} to ${chalk.bold(desinationFilepath)}`);
+    if (numRewrittenPaths !== 0) {
+      console.error(`rewrote ${chalk.green(numRewrittenPaths)} relative paths to resources`);
+    }
   }
 }
 

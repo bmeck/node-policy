@@ -1,5 +1,6 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
+const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -36,6 +37,7 @@ class IntegrityVerifyCommand extends Command {
     let modified = false;
     let selectedDefaultAlgorithm = false;
     let defaultAlgorithm = null;
+    let numChecked = 0;
     for (const entry of entries) {
       const real = entry.symlink ? await realpath(entry.path) : entry.path;
       const realURL = pathToFileURL(real);
@@ -68,12 +70,17 @@ class IntegrityVerifyCommand extends Command {
         }
         return false;
       }
+      numChecked++;
       if (
         hasIntegrityToResource(realHREF) || hasIntegrityToResource(relativeString)
       ) {
         // had a match
       } else {
-        console.log(`${realHREF} had unexpected value`);
+        if (!policy.resources[realHREF] && !policy.resources[relativeString]) {
+          console.error(`${chalk.yellow(relativeString)} is not in the policy`);
+        } else {
+          console.log(`${chalk.red(relativeString)} contents do not match integrity values`);
+        }
         if (interactive) {
           choosing_action:
           while (true) {
@@ -121,7 +128,9 @@ class IntegrityVerifyCommand extends Command {
     }
     if (modified) {
       writeFile(policyFilepath, JSON.stringify(policy, null, 2));
+      console.error(`modified ${chalk.bold(policyFilepath)}`);
     }
+    console.error(`checked ${chalk.green(numChecked)} resources in ${chalk.bold(location)}`);
   }
 }
 IntegrityVerifyCommand.strict = false;

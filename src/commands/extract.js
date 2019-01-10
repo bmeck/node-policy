@@ -1,5 +1,6 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
+const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
@@ -19,6 +20,7 @@ class ExtractCommand extends Command {
     const destinationLocation = new URL(pathToFileURL(desinationFilepath).href);
     const policy = JSON.parse(await readFile(policyFilepath, 'utf8'));
     const prefix = flags.prefix;
+    let numResources = 0;
     if (policy && typeof policy === 'object' && policy.resources) {
       for (const urlString of Object.keys(policy.resources)) {
         try {
@@ -26,6 +28,7 @@ class ExtractCommand extends Command {
           if (!absolute.href.startsWith(prefix)) {
             delete policy.resources[urlString];
           }
+          numResources++;
         } catch (error) {
           // URL resolution needs to be preserved
           const resourceLocation = new URL(urlString, pathToFileURL(policyFilepath));
@@ -36,11 +39,13 @@ class ExtractCommand extends Command {
               destinationLocation,
               resourceLocation);
             policy.resources[newURLString] = value;
+            numResources++;
           }
         }
       }
     }
-    await writeFile(args.DESTINATION, JSON.stringify(policy, null, 2));
+    await writeFile(desinationFilepath, JSON.stringify(policy, null, 2));
+    console.error(`wrote policy ${chalk.bold(desinationFilepath)} containing ${chalk.green(numResources)} resources`)
   }
 }
 
@@ -58,7 +63,7 @@ ExtractCommand.flags = Object.assign({
     description: 'prefix that all resources path should be within, even relative ones',
     required: true,
     parse: input => {
-      const prefix = new URL(input);
+      const prefix = new URL(input, pathToFileURL(process.cwd()));
       if (prefix.search || prefix.hash) {
         throw new SyntaxError('prefix cannot have search or hash component');
       }
