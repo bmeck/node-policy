@@ -4,10 +4,10 @@ node-policy
 
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/@bmeck/node-policy.svg)](https://npmjs.org/package/@bmeck/node-policy)
+[![Version](https://img.shields.io/npm/v/@bradleymeck/node-policy.svg)](https://npmjs.org/package/@bradleymeck/node-policy)
 [![CircleCI](https://circleci.com/gh/bmeck/node-policy/tree/master.svg?style=shield)](https://circleci.com/gh/bmeck/node-policy/tree/master)
 [![Codecov](https://codecov.io/gh/bmeck/node-policy/branch/master/graph/badge.svg)](https://codecov.io/gh/bmeck/node-policy)
-[![Downloads/week](https://img.shields.io/npm/dw/@bmeck/node-policy.svg)](https://npmjs.org/package/@bmeck/node-policy)
+[![Downloads/week](https://img.shields.io/npm/dw/@bradleymeck/node-policy.svg)](https://npmjs.org/package/@bradleymeck/node-policy)
 [![License](https://img.shields.io/npm/l/@bmeck/node-policy.svg)](https://github.com/bmeck/node-policy/blob/master/package.json)
 
 <!-- toc -->
