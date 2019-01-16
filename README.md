@@ -17,11 +17,11 @@ node-policy
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g @bmeck/node-policy
+$ npm install -g @bradleymeck/node-policy
 $ node-policy COMMAND
 running command...
 $ node-policy (-v|--version|version)
-@bmeck/node-policy/0.0.0 darwin-x64 node-v10.14.2
+@bradleymeck/node-policy/0.0.0 darwin-x64 node-v10.14.2
 $ node-policy --help [COMMAND]
 USAGE
   $ node-policy COMMAND
