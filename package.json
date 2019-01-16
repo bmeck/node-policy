@@ -1,7 +1,7 @@
 {
     "name": "@bmeck/node-policy",
     "version": "0.0.0",
-    "author": " @bmeck",
+    "author": " bradleymeck",
     "bin": {
         "node-policy": "./bin/run"
     },
@@ -34,7 +34,8 @@
     ],
     "homepage": "https://github.com/bmeck/node-policy",
     "keywords": [
-        "oclif"
+        "policy",
+        "integrity"
     ],
     "license": "MIT",
     "main": "src/index.js",
