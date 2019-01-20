@@ -10,7 +10,7 @@ const {
   URL,
   pathToFileURL,
 } = require('url');
-const {relativeURLString} = require('../url-helpers');
+const {relativeURLString} = require('../url_helpers');
 
 class MoveCommand extends Command {
   async run() {

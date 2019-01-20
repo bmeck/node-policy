@@ -16,13 +16,13 @@ const util = require('util');
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const jsonFile = require('json-file-plus');
-const {spawn} = require('child_process');
+const { asyncSpawn } = require('../child_process_helpers');
 const {
   URL,
   pathToFileURL,
 } = require('url');
 const semver = require('semver');
-const {relativeURLString} = require('../url-helpers');
+const {relativeURLString} = require('../url_helpers');
 const {cli} = require('cli-ux');
 
 
@@ -175,39 +175,4 @@ async function findPathsToPackage(packageManager, name) {
   }
   walk(routes.dependencies);
   return paths;
-}
-function asyncSpawn(cmd, args = []) {
-  return new Promise(async (f, r) => {
-    const child = spawn(cmd, args, {stdio: 'pipe'});
-    child.on('error', r);
-    f(Promise.all([
-      new Promise((f, r) => {
-        child.on('exit', (code) => {
-          f(code);
-        });
-      }),
-      new Promise(f => {
-        const bufs = [];
-        let len = 0;
-        child.stdout.on('data', d => {
-          bufs.push(d);
-          len += d.byteLength;
-        });
-        child.stdout.on('end', () => {
-          f(Buffer.concat(bufs, len));
-        });
-      }),
-      new Promise(f => {
-        const bufs = [];
-        let len = 0;
-        child.stderr.on('data', d => {
-          bufs.push(d);
-          len += d.byteLength;
-        });
-        child.stderr.on('end', () => {
-          f(Buffer.concat(bufs, len));
-        });
-      }),
-    ]));
-  });
 }

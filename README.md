@@ -21,7 +21,7 @@ $ npm install -g @bradleymeck/node-policy
 $ node-policy COMMAND
 running command...
 $ node-policy (-v|--version|version)
-@bradleymeck/node-policy/0.0.0 darwin-x64 node-v10.14.2
+@bradleymeck/node-policy/0.0.0 darwin-x64 node-v11.7.0
 $ node-policy --help [COMMAND]
 USAGE
   $ node-policy COMMAND
@@ -34,9 +34,12 @@ USAGE
 * [`node-policy help [COMMAND]`](#node-policy-help-command)
 * [`node-policy install`](#node-policy-install)
 * [`node-policy integrity:add LOCATION`](#node-policy-integrityadd-location)
+* [`node-policy integrity:delete LOCATION`](#node-policy-integritydelete-location)
 * [`node-policy integrity:verify LOCATION`](#node-policy-integrityverify-location)
+* [`node-policy integrity:view LOCATION`](#node-policy-integrityview-location)
 * [`node-policy locate`](#node-policy-locate)
 * [`node-policy mv DESTINATION`](#node-policy-mv-destination)
+* [`node-policy run`](#node-policy-run)
 
 ## `node-policy extract DESTINATION`
 
@@ -120,6 +123,26 @@ DESCRIPTION
 
 _See code: [src/commands/integrity/add.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/add.js)_
 
+## `node-policy integrity:delete LOCATION`
+
+Removes integrity values for a location.
+
+```
+USAGE
+  $ node-policy integrity:delete LOCATION
+
+ARGUMENTS
+  LOCATION  desired location
+
+OPTIONS
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+
+DESCRIPTION
+  Removes integrity values for a location.
+```
+
+_See code: [src/commands/integrity/delete.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/delete.js)_
+
 ## `node-policy integrity:verify LOCATION`
 
 Checks integrity values for a location.
@@ -140,6 +163,26 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/integrity/verify.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/verify.js)_
+
+## `node-policy integrity:view LOCATION`
+
+Shows all integrity values for a location.
+
+```
+USAGE
+  $ node-policy integrity:view LOCATION
+
+ARGUMENTS
+  LOCATION  desired location
+
+OPTIONS
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+
+DESCRIPTION
+  Shows all integrity values for a location.
+```
+
+_See code: [src/commands/integrity/view.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/view.js)_
 
 ## `node-policy locate`
 
@@ -178,4 +221,21 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/mv.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/mv.js)_
+
+## `node-policy run`
+
+Prints the location of the policy file, complaining if some common misconfiguration
+
+```
+USAGE
+  $ node-policy run
+
+OPTIONS
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+
+DESCRIPTION
+  Prints the location of the policy file, complaining if some common misconfiguration
+```
+
+_See code: [src/commands/run.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/run.js)_
 <!-- commandsstop -->

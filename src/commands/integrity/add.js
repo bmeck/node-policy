@@ -10,7 +10,7 @@ const stat = util.promisify(fs.stat);
 const realpath = util.promisify(fs.realpath);
 const {pathToFileURL} = require('url');
 const rrdir = require('rrdir');
-const {relativeURLString} = require('../../url-helpers');
+const {relativeURLString} = require('../../url_helpers');
 const {parse: parseSRI} = require('../../sri');
 const crypto = require('crypto');
 
@@ -53,20 +53,18 @@ class IntegrityAddCommand extends Command {
       const hasher = crypto.createHash(algorithm);
       hasher.update(await readFile(real));
       const digest = hasher.digest('base64');
-      function addIntegrityToResource(location, algorithm, value) {
+      function addIntegrityToResource(location, algorithm, digest) {
         if (policy.resources[location]) {
           let seen = new Map();
-          if (!policy.resources[location].integrity) {
-            policy.resources[location].integrity = '';
-          }
           let alreadyExists = false;
-          for (const existing of parseSRI(policy.resources[location].integrity)) {
+          const integrityStr = policy.resources[location].integrity || '';
+          for (const existing of parseSRI(integrityStr)) {
             if (!seen.has(existing.algorithm)) {
               seen.set(existing.algorithm, new Set());
             }
             const valueStr = existing.value.toString('base64');
             seen.get(existing.algorithm).add(valueStr);
-            if (existing.algorithm === algorithm && valueStr === value) {
+            if (existing.algorithm === algorithm && valueStr === digest) {
               alreadyExists = true;
             }
           }
@@ -75,15 +73,24 @@ class IntegrityAddCommand extends Command {
             if (!seen.has(algorithm)) {
               seen.set(algorithm, new Set());
             }
-            seen.get(algorithm).add(value);
+            seen.get(algorithm).add(digest);
+          } else if (flags.discard) {
+            if (seen.size === 1 && seen.get(algorithm).size === 1) {
+              return true;
+            } else {
+              numAdditions++;
+              policy.resources[location].integrity = `${algorithm}-${digest}`;
+              return true;
+            }
           }
-          policy.resources[location].integrity = [
+          const newIntegrityStr = [
             ...seen.entries()
           ].sort((a,b) => {
             return `${a[0]}` > `${b[0]}` ? 1 : -1;
           }).map(([alg, values]) => {
             return [...values].map(v => `${alg}-${v}`).join(' ')
           }).join(' ');
+          policy.resources[location].integrity = newIntegrityStr;
           return true;
         }
         return false;
@@ -121,6 +128,13 @@ IntegrityAddCommand.flags = Object.assign({
       'sha384',
       'sha512',
     ]
+  }),
+  discard: flags.boolean({
+    char: 'd',
+    name: 'discard',
+    description: 'discards other integrities for the resources',
+    required: false,
+    default: false,
   })
 }, require('../../flags'));
 
