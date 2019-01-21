@@ -115,6 +115,7 @@ ARGUMENTS
 
 OPTIONS
   -a, --algorithm=(sha256|sha384|sha512)  (required) digest algorithm to use for integrity checks
+  -d, --discard                           discards other integrities for the resources
   -p, --policy=policy                     [default: /Users/bfarias/.node-policy.json] path of policy file being
 
 DESCRIPTION

@@ -8,6 +8,7 @@ class RunCommand extends Command {
     const fs = require('fs');
     const util = require('util');
     const readFile = util.promisify(fs.readFile);
+    const access = util.promisify(fs.access);
     const { spawn } = require('child_process');
     const { getHashes, createHash } = require('crypto');
     const {flags} = this.parse(RunCommand);
@@ -30,10 +31,27 @@ class RunCommand extends Command {
     const hash = createHash(supportedAlgorithms[supportedAlgorithms.length - 1]);
     hash.update(policyContents);
     const beforeRunPolicyDigest = hash.digest('base64');
+    const argv = this.argv;
+    try {
+      let resolved = path.resolve(process.cwd(), argv[0]);
+      await access(resolved);
+    } catch (e) {
+      const pathEnvSeparator = process.platform === 'win32' ? ';' : ':';
+      const which = util.promisify(require('which'));
+      argv[0] = await which(argv[0], {
+        path: `${
+          process.env.PATH
+        }${
+          pathEnvSeparator
+        }${
+          path.resolve(process.cwd(), 'node_modules', '.bin')
+        }`
+      });
+    }
     const child = spawn(process.execPath, [
       '--experimental-policy',
       policyFilepath,
-      ...this.argv
+      ...argv
     ], {
       stdio: 'inherit',
     });
