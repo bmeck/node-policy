@@ -1,19 +1,19 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
-const chalk = require('chalk');
-const path = require('path');
-const fs = require('fs');
-const util = require('util');
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
-const {
-  URL,
-  pathToFileURL,
-} = require('url');
-const {relativeURLString} = require('../url_helpers');
 
 class ExtractCommand extends Command {
   async run() {
+    const chalk = require('chalk');
+    const path = require('path');
+    const fs = require('fs');
+    const util = require('util');
+    const readFile = util.promisify(fs.readFile);
+    const writeFile = util.promisify(fs.writeFile);
+    const {
+      URL,
+      pathToFileURL,
+    } = require('url');
+    const {relativeURLString} = require('../url_helpers');
     const {flags, args} = this.parse(ExtractCommand);
     const policyFilepath = path.resolve(flags.policy);
     const desinationFilepath = path.resolve(args.DESTINATION);

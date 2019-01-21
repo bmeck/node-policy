@@ -1,21 +1,21 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
-const chalk = require('chalk');
-const path = require('path');
-const fs = require('fs');
-const util = require('util');
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
-const stat = util.promisify(fs.stat);
-const realpath = util.promisify(fs.realpath);
-const {pathToFileURL} = require('url');
-const rrdir = require('rrdir');
-const {relativeURLString} = require('../../url_helpers');
-const {parse: parseSRI} = require('../../sri');
-const crypto = require('crypto');
-
 class IntegrityAddCommand extends Command {
   async run() {
+    const chalk = require('chalk');
+    const path = require('path');
+    const fs = require('fs');
+    const util = require('util');
+    const readFile = util.promisify(fs.readFile);
+    const writeFile = util.promisify(fs.writeFile);
+    const stat = util.promisify(fs.stat);
+    const realpath = util.promisify(fs.realpath);
+    const {pathToFileURL} = require('url');
+    const rrdir = require('rrdir');
+    const {relativeURLString} = require('../../url_helpers');
+    const {parse: parseSRI} = require('../../sri');
+    const crypto = require('crypto');
+    
     const {flags, args} = this.parse(IntegrityAddCommand);
     const policyFilepath = path.resolve(flags.policy);
     const policyLocation = pathToFileURL(policyFilepath);

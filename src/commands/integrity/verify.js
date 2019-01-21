@@ -1,22 +1,23 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
-const chalk = require('chalk');
-const path = require('path');
-const fs = require('fs');
-const util = require('util');
-const writeFile = util.promisify(fs.writeFile);
-const readFile = util.promisify(fs.readFile);
-const stat = util.promisify(fs.stat);
-const realpath = util.promisify(fs.realpath);
-const {pathToFileURL} = require('url');
-const rrdir = require('rrdir');
-const {relativeURLString} = require('../../url_helpers');
-const {parse: parseSRI} = require('../../sri');
-const crypto = require('crypto');
-const {cli} = require('cli-ux');
 
 class IntegrityVerifyCommand extends Command {
   async run() {
+    const chalk = require('chalk');
+    const path = require('path');
+    const fs = require('fs');
+    const util = require('util');
+    const writeFile = util.promisify(fs.writeFile);
+    const readFile = util.promisify(fs.readFile);
+    const stat = util.promisify(fs.stat);
+    const realpath = util.promisify(fs.realpath);
+    const {pathToFileURL} = require('url');
+    const rrdir = require('rrdir');
+    const {relativeURLString} = require('../../url_helpers');
+    const {parse: parseSRI} = require('../../sri');
+    const crypto = require('crypto');
+    const {cli} = require('cli-ux');
+    
     const {flags, args} = this.parse(IntegrityVerifyCommand);
     const policyFilepath = path.resolve(flags.policy);
     const policyLocation = pathToFileURL(policyFilepath);

@@ -1,13 +1,14 @@
 'use strict';
 const {Command, flags} = require('@oclif/command');
-const chalk = require('chalk');
-const path = require('path');
-const fs = require('fs');
-const util = require('util');
-const access = util.promisify(fs.access);
 
 class LocateCommand extends Command {
   async run() {
+    const chalk = require('chalk');
+    const path = require('path');
+    const fs = require('fs');
+    const util = require('util');
+    const access = util.promisify(fs.access);
+    
     const {flags} = this.parse(LocateCommand);
     const policyFilepath = path.resolve(flags.policy);
     try {

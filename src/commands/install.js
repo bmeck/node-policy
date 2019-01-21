@@ -10,24 +10,63 @@
 // 4. all of this out of band and then updated with a safer final swap operation
 'use strict';
 const {Command, flags} = require('@oclif/command');
-const path = require('path');
-const fs = require('fs');
-const util = require('util');
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
-const jsonFile = require('json-file-plus');
-const { asyncSpawn } = require('../child_process_helpers');
-const {
-  URL,
-  pathToFileURL,
-} = require('url');
-const semver = require('semver');
-const {relativeURLString} = require('../url_helpers');
-const {cli} = require('cli-ux');
-
 
 class InstallCommand extends Command {
   async run() {
+    const path = require('path');
+    const fs = require('fs');
+    const util = require('util');
+    const readFile = util.promisify(fs.readFile);
+    const writeFile = util.promisify(fs.writeFile);
+    const jsonFile = require('json-file-plus');
+    const { asyncSpawn } = require('../child_process_helpers');
+    const {
+      URL,
+      pathToFileURL,
+    } = require('url');
+    const semver = require('semver');
+    const {relativeURLString} = require('../url_helpers');
+    const {cli} = require('cli-ux');
+
+    async function getInstallerActions(packageManager) {
+      const [code, stdout, stderr] = await asyncSpawn(packageManager, [
+        'install',
+        '--dry-run',
+        '--json',
+        '--ignore-scripts'
+      ]);
+      if (code !== 0) {
+        throw new Error(`Package manager exited with code ${code}\n${stderr.toString('utf8')}`);
+      } else {
+        return JSON.parse(stdout.toString('utf8'));
+      }
+    }
+
+    async function findPathsToPackage(packageManager, name) {
+      const [code, stdout, stderr] = await asyncSpawn(packageManager, ['ls', '--json', '--', name]);
+      // missing causes non-zero exit
+      const routes = JSON.parse(stdout);
+      const paths = [];
+      const walk = (node, path = []) => {
+        const packages = Object.keys(node);
+        for (const pkgName of packages) {
+          const nextPath = [...path, pkgName];
+          const pkg = node[pkgName];
+          if (pkg.dependencies) {
+            walk(pkg.dependencies, nextPath)
+          }
+          if (pkgName === name) {
+            paths.push({
+              path: nextPath,
+              from: pkg.missing ? pkg.required : pkg.from.slice(name.length + 1),
+            })
+          }
+        }
+      }
+      walk(routes.dependencies);
+      return paths;
+    }
+
     const {flags, args} = this.parse(InstallCommand);
     const fix = flags.fix;
     const packageManager = flags['package-manager'];
@@ -137,42 +176,3 @@ InstallCommand.flags = Object.assign({
 }, require('../flags'));
 
 module.exports = InstallCommand;
-
-async function getInstallerActions(packageManager) {
-  const [code, stdout, stderr] = await asyncSpawn(packageManager, [
-    'install',
-    '--dry-run',
-    '--json',
-    '--ignore-scripts'
-  ]);
-  if (code !== 0) {
-    throw new Error(`Package manager exited with code ${code}\n${stderr.toString('utf8')}`);
-  } else {
-    return JSON.parse(stdout.toString('utf8'));
-  }
-}
-
-async function findPathsToPackage(packageManager, name) {
-  const [code, stdout, stderr] = await asyncSpawn(packageManager, ['ls', '--json', '--', name]);
-  // missing causes non-zero exit
-  const routes = JSON.parse(stdout);
-  const paths = [];
-  const walk = (node, path = []) => {
-    const packages = Object.keys(node);
-    for (const pkgName of packages) {
-      const nextPath = [...path, pkgName];
-      const pkg = node[pkgName];
-      if (pkg.dependencies) {
-        walk(pkg.dependencies, nextPath)
-      }
-      if (pkgName === name) {
-        paths.push({
-          path: nextPath,
-          from: pkg.missing ? pkg.required : pkg.from.slice(name.length + 1),
-        })
-      }
-    }
-  }
-  walk(routes.dependencies);
-  return paths;
-}

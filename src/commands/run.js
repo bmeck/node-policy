@@ -27,10 +27,7 @@ class RunCommand extends Command {
         USABLE_ALGORITHMS.map(algo => chalk.green(algo)).join(', ')
       }`);
     }
-    const policyContents = await readFile(policyFilepath);
-    const hash = createHash(supportedAlgorithms[supportedAlgorithms.length - 1]);
-    hash.update(policyContents);
-    const beforeRunPolicyDigest = hash.digest('base64');
+    const prePolicyContents = await readFile(policyFilepath);
     const argv = this.argv;
     const pathEnvSeparator = process.platform === 'win32' ? ';' : ':';
     const childPATH = `${
@@ -61,10 +58,13 @@ class RunCommand extends Command {
       stdio: 'inherit',
     });
     child.on('exit', async (code, signal) => {
-      const policyContents = await readFile(policyFilepath);
-      const hash = createHash(supportedAlgorithms[supportedAlgorithms.length - 1]);
-      hash.update(policyContents);
-      const afterRunPolicyDigest = hash.digest('base64');
+      const preHash = createHash(supportedAlgorithms[supportedAlgorithms.length - 1]);
+      preHash.update(prePolicyContents);
+      const beforeRunPolicyDigest = preHash.digest('base64');
+      const postPolicyContents = await readFile(policyFilepath);
+      const postHash = createHash(supportedAlgorithms[supportedAlgorithms.length - 1]);
+      postHash.update(postPolicyContents);
+      const afterRunPolicyDigest = postHash.digest('base64');
       if (beforeRunPolicyDigest !== afterRunPolicyDigest) {
         console.error(`${chalk.yellow(policyFilepath)} was modified.`)
       }
