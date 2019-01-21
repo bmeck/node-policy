@@ -32,20 +32,25 @@ class RunCommand extends Command {
     hash.update(policyContents);
     const beforeRunPolicyDigest = hash.digest('base64');
     const argv = this.argv;
+    const pathEnvSeparator = process.platform === 'win32' ? ';' : ':';
+    const childPATH = `${
+        process.env.PATH
+      }${
+        pathEnvSeparator
+      }${
+        path.resolve(process.cwd(), 'node_modules', '.bin')
+      }`;
     try {
-      let resolved = path.resolve(process.cwd(), argv[0]);
+      const resolved = path.resolve(process.cwd(), argv[0]);
       await access(resolved);
+      argv[0] = resolved;
     } catch (e) {
-      const pathEnvSeparator = process.platform === 'win32' ? ';' : ':';
+      /**
+       * @type {(cmd: string, options: {path: string}) => Promise<string>}
+       */
       const which = util.promisify(require('which'));
       argv[0] = await which(argv[0], {
-        path: `${
-          process.env.PATH
-        }${
-          pathEnvSeparator
-        }${
-          path.resolve(process.cwd(), 'node_modules', '.bin')
-        }`
+        path: childPATH,
       });
     }
     const child = spawn(process.execPath, [
