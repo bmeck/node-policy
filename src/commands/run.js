@@ -1,5 +1,5 @@
 'use strict';
-const {Command} = require('@oclif/command');
+const {Command, flags} = require('@oclif/command');
 
 class RunCommand extends Command {
   async run() {
@@ -8,10 +8,13 @@ class RunCommand extends Command {
     const fs = require('fs');
     const util = require('util');
     const readFile = util.promisify(fs.readFile);
+    const writeFile = util.promisify(fs.writeFile);
     const access = util.promisify(fs.access);
     const { spawn } = require('child_process');
     const { getHashes, createHash } = require('crypto');
-    const {flags} = this.parse(RunCommand);
+    const { argv, flags} = this.parse(RunCommand);
+    const { cli } = require('cli-ux');
+
     const SUPPORTED_HASHES = new Set(getHashes());
     const USABLE_ALGORITHMS = Object.freeze([
       'sha256',
@@ -28,7 +31,6 @@ class RunCommand extends Command {
       }`);
     }
     const prePolicyContents = await readFile(policyFilepath);
-    const argv = this.argv;
     const pathEnvSeparator = process.platform === 'win32' ? ';' : ':';
     const childPATH = `${
         process.env.PATH
@@ -37,18 +39,20 @@ class RunCommand extends Command {
       }${
         path.resolve(process.cwd(), 'node_modules', '.bin')
       }`;
-    try {
-      const resolved = path.resolve(process.cwd(), argv[0]);
-      await access(resolved);
-      argv[0] = resolved;
-    } catch (e) {
-      /**
-       * @type {(cmd: string, options: {path: string}) => Promise<string>}
-       */
-      const which = util.promisify(require('which'));
-      argv[0] = await which(argv[0], {
-        path: childPATH,
-      });
+    if (argv.length) {
+      try {
+        const resolved = path.resolve(process.cwd(), argv[0]);
+        await access(resolved);
+        argv[0] = resolved;
+      } catch (e) {
+        /**
+         * @type {(cmd: string, options: {path: string}) => Promise<string>}
+         */
+        const which = util.promisify(require('which'));
+        argv[0] = await which(argv[0], {
+          path: childPATH,
+        });
+      }
     }
     const child = spawn(process.execPath, [
       '--experimental-policy',
@@ -66,7 +70,18 @@ class RunCommand extends Command {
       postHash.update(postPolicyContents);
       const afterRunPolicyDigest = postHash.digest('base64');
       if (beforeRunPolicyDigest !== afterRunPolicyDigest) {
-        console.error(`${chalk.yellow(policyFilepath)} was modified.`)
+        console.error(`${chalk.yellow(policyFilepath)} was modified.`);
+        if (flags.interactive) {
+          let c;
+          while (c = await cli.prompt('Revert the policy to its original contents? yes (y) no (n)')) {
+            if (c === 'y') {
+              await writeFile(policyFilepath, prePolicyContents);
+              break;
+            } else if (c === 'n') {
+              break;
+            }
+          }
+        }
       }
       if (signal) {
         process.kill(process.pid, signal);
@@ -85,6 +100,13 @@ RunCommand.description = `
 Prints the location of the policy file, complaining if some common misconfiguration
 `;
 
-RunCommand.flags = Object.assign({}, require('../flags'));
+RunCommand.flags = Object.assign({
+  interactive: flags.boolean({
+    char: 'i',
+    name: 'interactive',
+    description: 'allow prompting for interactions regarding policies',
+    default: false
+  })
+}, require('../flags'));
 
 module.exports = RunCommand;

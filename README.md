@@ -232,6 +232,7 @@ USAGE
   $ node-policy run
 
 OPTIONS
+  -i, --interactive    allow prompting for interactions regarding policies
   -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
 
 DESCRIPTION

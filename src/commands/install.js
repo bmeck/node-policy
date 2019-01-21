@@ -45,7 +45,7 @@ class InstallCommand extends Command {
     async function findPathsToPackage(packageManager, name) {
       const [code, stdout, stderr] = await asyncSpawn(packageManager, ['ls', '--json', '--', name]);
       // missing causes non-zero exit
-      const routes = JSON.parse(stdout);
+      const routes = JSON.parse(stdout.toString('utf8'));
       const paths = [];
       const walk = (node, path = []) => {
         const packages = Object.keys(node);
