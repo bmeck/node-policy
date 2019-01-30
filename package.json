@@ -1,6 +1,6 @@
 {
     "name": "@bradleymeck/node-policy",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "author": " bradleymeck",
     "bin": {
         "node-policy": "./bin/run"

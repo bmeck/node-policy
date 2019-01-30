@@ -21,7 +21,7 @@ $ npm install -g @bradleymeck/node-policy
 $ node-policy COMMAND
 running command...
 $ node-policy (-v|--version|version)
-@bradleymeck/node-policy/0.0.0 darwin-x64 node-v11.7.0
+@bradleymeck/node-policy/0.1.0 darwin-x64 node-v10.14.2
 $ node-policy --help [COMMAND]
 USAGE
   $ node-policy COMMAND
@@ -60,7 +60,7 @@ DESCRIPTION
   Create a new policy file that only contains paths pointing within a specific prefix
 ```
 
-_See code: [src/commands/extract.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/extract.js)_
+_See code: [src/commands/extract.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/extract.js)_
 
 ## `node-policy help [COMMAND]`
 
@@ -100,7 +100,7 @@ DESCRIPTION
   then runs install scripts with integrity checks applied
 ```
 
-_See code: [src/commands/install.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/install.js)_
+_See code: [src/commands/install.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/install.js)_
 
 ## `node-policy integrity:add LOCATION`
 
@@ -122,7 +122,7 @@ DESCRIPTION
   Adds integrity values for a location.
 ```
 
-_See code: [src/commands/integrity/add.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/add.js)_
+_See code: [src/commands/integrity/add.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/integrity/add.js)_
 
 ## `node-policy integrity:delete LOCATION`
 
@@ -142,7 +142,7 @@ DESCRIPTION
   Removes integrity values for a location.
 ```
 
-_See code: [src/commands/integrity/delete.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/delete.js)_
+_See code: [src/commands/integrity/delete.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/integrity/delete.js)_
 
 ## `node-policy integrity:verify LOCATION`
 
@@ -163,7 +163,7 @@ DESCRIPTION
   Checks integrity values for a location.
 ```
 
-_See code: [src/commands/integrity/verify.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/verify.js)_
+_See code: [src/commands/integrity/verify.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/integrity/verify.js)_
 
 ## `node-policy integrity:view LOCATION`
 
@@ -183,7 +183,7 @@ DESCRIPTION
   Shows all integrity values for a location.
 ```
 
-_See code: [src/commands/integrity/view.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/integrity/view.js)_
+_See code: [src/commands/integrity/view.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/integrity/view.js)_
 
 ## `node-policy locate`
 
@@ -201,7 +201,7 @@ DESCRIPTION
   Prints the location of the policy file, complaining if some common misconfiguration
 ```
 
-_See code: [src/commands/locate.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/locate.js)_
+_See code: [src/commands/locate.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/locate.js)_
 
 ## `node-policy mv DESTINATION`
 
@@ -221,7 +221,7 @@ DESCRIPTION
   Move a policy file to a new location, rewriting resource paths as needed
 ```
 
-_See code: [src/commands/mv.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/mv.js)_
+_See code: [src/commands/mv.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/mv.js)_
 
 ## `node-policy run`
 
@@ -239,5 +239,5 @@ DESCRIPTION
   Prints the location of the policy file, complaining if some common misconfiguration
 ```
 
-_See code: [src/commands/run.js](https://github.com/bmeck/node-policy/blob/v0.0.0/src/commands/run.js)_
+_See code: [src/commands/run.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/run.js)_
 <!-- commandsstop -->
