@@ -66,7 +66,9 @@ IntegrityViewCommand.description = `
 Shows all integrity values for a location.
 `;
 
-IntegrityViewCommand.flags = Object.assign({
-}, require('../../flags'));
+const {policy} = require('../../flags');
+IntegrityViewCommand.flags = {
+  policy
+};
 
 module.exports = IntegrityViewCommand;

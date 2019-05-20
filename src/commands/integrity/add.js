@@ -1,5 +1,5 @@
 'use strict';
-const {Command, flags} = require('@oclif/command');
+const {Command} = require('@oclif/command');
 class IntegrityAddCommand extends Command {
   async run() {
     const chalk = require('chalk');
@@ -117,25 +117,11 @@ IntegrityAddCommand.description = `
 Adds integrity values for a location.
 `;
 
-IntegrityAddCommand.flags = Object.assign({
-  algorithm: flags.enum({
-    char: 'a',
-    name: 'algorithm',
-    description: 'digest algorithm to use for integrity checks',
-    required: true,
-    options: [
-      'sha256',
-      'sha384',
-      'sha512',
-    ]
-  }),
-  discard: flags.boolean({
-    char: 'd',
-    name: 'discard',
-    description: 'discards other integrities for the resources',
-    required: false,
-    default: false,
-  })
-}, require('../../flags'));
+const {algorithm, discard, policy} = require('../../flags');
+IntegrityAddCommand.flags = {
+  algorithm,
+  discard,
+  policy
+};
 
 module.exports = IntegrityAddCommand;

@@ -21,7 +21,7 @@ $ npm install -g @bradleymeck/node-policy
 $ node-policy COMMAND
 running command...
 $ node-policy (-v|--version|version)
-@bradleymeck/node-policy/0.1.0 darwin-x64 node-v10.14.2
+@bradleymeck/node-policy/0.1.0 darwin-x64 node-v12.1.0
 $ node-policy --help [COMMAND]
 USAGE
   $ node-policy COMMAND
@@ -34,6 +34,7 @@ USAGE
 * [`node-policy help [COMMAND]`](#node-policy-help-command)
 * [`node-policy install`](#node-policy-install)
 * [`node-policy integrity:add LOCATION`](#node-policy-integrityadd-location)
+* [`node-policy integrity:calculate LOCATION`](#node-policy-integritycalculate-location)
 * [`node-policy integrity:delete LOCATION`](#node-policy-integritydelete-location)
 * [`node-policy integrity:verify LOCATION`](#node-policy-integrityverify-location)
 * [`node-policy integrity:view LOCATION`](#node-policy-integrityview-location)
@@ -53,8 +54,7 @@ ARGUMENTS
   DESTINATION  desired new path of the policy file
 
 OPTIONS
-  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
-  --prefix=prefix      (required) prefix that all resources path should be within, even relative ones
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Create a new policy file that only contains paths pointing within a specific prefix
@@ -88,7 +88,7 @@ USAGE
   $ node-policy install
 
 OPTIONS
-  -p, --policy=policy                [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -p, --policy=policy                [default: /Users/bfarias/.node-policy.json] path of policy file
   --fix=(always|never|prompt)        [default: prompt]
   --package-manager=package-manager  [default: npm]
 
@@ -116,13 +116,33 @@ ARGUMENTS
 OPTIONS
   -a, --algorithm=(sha256|sha384|sha512)  (required) digest algorithm to use for integrity checks
   -d, --discard                           discards other integrities for the resources
-  -p, --policy=policy                     [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -p, --policy=policy                     [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Adds integrity values for a location.
 ```
 
 _See code: [src/commands/integrity/add.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/integrity/add.js)_
+
+## `node-policy integrity:calculate LOCATION`
+
+Calculates the integrity value a location, without consulting the policy.
+
+```
+USAGE
+  $ node-policy integrity:calculate LOCATION
+
+ARGUMENTS
+  LOCATION  desired location
+
+OPTIONS
+  -a, --algorithm=(sha256|sha384|sha512)  (required) digest algorithm to use for integrity checks
+
+DESCRIPTION
+  Calculates the integrity value a location, without consulting the policy.
+```
+
+_See code: [src/commands/integrity/calculate.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/integrity/calculate.js)_
 
 ## `node-policy integrity:delete LOCATION`
 
@@ -136,7 +156,7 @@ ARGUMENTS
   LOCATION  desired location
 
 OPTIONS
-  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Removes integrity values for a location.
@@ -157,7 +177,7 @@ ARGUMENTS
 
 OPTIONS
   -i, --interactive
-  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Checks integrity values for a location.
@@ -177,7 +197,7 @@ ARGUMENTS
   LOCATION  desired location
 
 OPTIONS
-  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Shows all integrity values for a location.
@@ -194,7 +214,7 @@ USAGE
   $ node-policy locate
 
 OPTIONS
-  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
   --strict             exits with an error if policy is misconfigured
 
 DESCRIPTION
@@ -215,7 +235,7 @@ ARGUMENTS
   DESTINATION  desired new path of the policy file
 
 OPTIONS
-  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Move a policy file to a new location, rewriting resource paths as needed
@@ -232,8 +252,8 @@ USAGE
   $ node-policy run
 
 OPTIONS
-  -i, --interactive    allow prompting for interactions regarding policies
-  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file being
+  -i, --interactive
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Prints the location of the policy file, complaining if some common misconfiguration

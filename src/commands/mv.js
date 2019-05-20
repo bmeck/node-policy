@@ -56,6 +56,7 @@ MoveCommand.description = `
 Move a policy file to a new location, rewriting resource paths as needed
 `;
 
-MoveCommand.flags = Object.assign({}, require('../flags'));
+const {policy} = require('../flags');
+MoveCommand.flags = {policy};
 
 module.exports = MoveCommand;

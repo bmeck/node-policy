@@ -161,7 +161,8 @@ Installs the current directory without running install scripts
 then runs install scripts with integrity checks applied
 `;
 
-InstallCommand.flags = Object.assign({
+const {policy} = require('../flags');
+InstallCommand.flags = {
   'package-manager': flags.string({
     default: 'npm'
   }),
@@ -172,7 +173,8 @@ InstallCommand.flags = Object.assign({
       'prompt',
     ],
     default: 'prompt',
-  })
-}, require('../flags'));
+  }),
+  policy
+};
 
 module.exports = InstallCommand;

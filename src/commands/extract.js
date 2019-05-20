@@ -1,5 +1,5 @@
 'use strict';
-const {Command, flags} = require('@oclif/command');
+const {Command} = require('@oclif/command');
 
 class ExtractCommand extends Command {
   async run() {
@@ -57,22 +57,9 @@ ExtractCommand.description = `
 Create a new policy file that only contains paths pointing within a specific prefix
 `;
 
-ExtractCommand.flags = Object.assign({
-  prefix: flags.string({
-    name: 'prefix',
-    description: 'prefix that all resources path should be within, even relative ones',
-    required: true,
-    parse: input => {
-      const prefix = new URL(input, pathToFileURL(process.cwd()));
-      if (prefix.search || prefix.hash) {
-        throw new SyntaxError('prefix cannot have search or hash component');
-      }
-      if (!prefix.pathname.endsWith('/')) {
-        prefix.pathname += '/';
-      }
-      return prefix.href;
-    }
-  })
-}, require('../flags'));
+const {policy} = require('../flags');
+ExtractCommand.flags = {
+  policy
+};
 
 module.exports = ExtractCommand;

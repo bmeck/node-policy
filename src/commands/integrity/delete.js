@@ -1,5 +1,5 @@
 'use strict';
-const {Command, flags} = require('@oclif/command');
+const {Command} = require('@oclif/command');
 
 class IntegrityDeleteCommand extends Command {
   async run() {
@@ -73,7 +73,9 @@ IntegrityDeleteCommand.description = `
 Removes integrity values for a location.
 `;
 
-IntegrityDeleteCommand.flags = Object.assign({
-}, require('../../flags'));
+const {policy} = require('../../flags');
+IntegrityDeleteCommand.flags = {
+  policy
+};
 
 module.exports = IntegrityDeleteCommand;

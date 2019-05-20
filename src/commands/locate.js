@@ -32,12 +32,14 @@ LocateCommand.description = `
 Prints the location of the policy file, complaining if some common misconfiguration
 `;
 
-LocateCommand.flags = Object.assign({
+const {policy} = require('../flags');
+LocateCommand.flags = {
   strict: flags.boolean({
     name: 'strict',
     description: 'exits with an error if policy is misconfigured',
     default: false,
-  })
-}, require('../flags'));
+  }),
+  policy
+};
 
 module.exports = LocateCommand;

@@ -1,5 +1,5 @@
 'use strict';
-const {Command, flags} = require('@oclif/command');
+const {Command} = require('@oclif/command');
 
 class IntegrityVerifyCommand extends Command {
   async run() {
@@ -143,11 +143,10 @@ IntegrityVerifyCommand.description = `
 Checks integrity values for a location.
 `;
 
-IntegrityVerifyCommand.flags = Object.assign({
-  interactive: flags.boolean({
-    char: 'i',
-    default: false
-  })
-}, require('../../flags'));
+const {interactive, policy} = require('../../flags');
+IntegrityVerifyCommand.flags = {
+  interactive,
+  policy
+};
 
 module.exports = IntegrityVerifyCommand;

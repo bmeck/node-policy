@@ -1,5 +1,5 @@
 'use strict';
-const {Command, flags} = require('@oclif/command');
+const {Command} = require('@oclif/command');
 
 class RunCommand extends Command {
   async run() {
@@ -100,13 +100,10 @@ RunCommand.description = `
 Prints the location of the policy file, complaining if some common misconfiguration
 `;
 
-RunCommand.flags = Object.assign({
-  interactive: flags.boolean({
-    char: 'i',
-    name: 'interactive',
-    description: 'allow prompting for interactions regarding policies',
-    default: false
-  })
-}, require('../flags'));
+const {interactive, policy} = require('../flags');
+RunCommand.flags = {
+  interactive,
+  policy
+};
 
 module.exports = RunCommand;
