@@ -15,11 +15,31 @@ module.exports = {
       ]
     });
   },
+  get dependencies() {
+    return flags.string({
+      name: 'dependencies',
+      description: 'a dependency mapping, as JSON. e.g. --dependencies=\'{"fs":"node:fs"}\'',
+      required: true,
+      parse: input => {
+        const json = JSON.parse(`${input}`);
+        if (json === true) return true;
+        if (json && typeof json === 'object' && !Array.isArray(json)) {
+          for (const value of Object.values(json)) {
+            if (typeof value !== 'string' && value !== true) {
+              throw SyntaxError('dependency values must be a string or the boolean value true');
+            }
+          }
+          return json;
+        }
+        throw SyntaxError('dependency must be an object in JSON format');
+      }
+    });
+  },
   get discard() {
     return flags.boolean({
       char: 'd',
       name: 'discard',
-      description: 'discards other integrities for the resources',
+      description: 'discards existing values for the resources',
       required: false,
       default: false,
     });

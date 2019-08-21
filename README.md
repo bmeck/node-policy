@@ -21,7 +21,7 @@ $ npm install -g @bradleymeck/node-policy
 $ node-policy COMMAND
 running command...
 $ node-policy (-v|--version|version)
-@bradleymeck/node-policy/0.1.0 darwin-x64 node-v12.1.0
+@bradleymeck/node-policy/0.1.0 darwin-x64 node-v12.7.0
 $ node-policy --help [COMMAND]
 USAGE
   $ node-policy COMMAND
@@ -30,6 +30,9 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`node-policy dependencies:add LOCATION`](#node-policy-dependenciesadd-location)
+* [`node-policy dependencies:summarize`](#node-policy-dependenciessummarize)
+* [`node-policy dependencies:view LOCATION`](#node-policy-dependenciesview-location)
 * [`node-policy extract DESTINATION`](#node-policy-extract-destination)
 * [`node-policy help [COMMAND]`](#node-policy-help-command)
 * [`node-policy install`](#node-policy-install)
@@ -41,6 +44,66 @@ USAGE
 * [`node-policy locate`](#node-policy-locate)
 * [`node-policy mv DESTINATION`](#node-policy-mv-destination)
 * [`node-policy run`](#node-policy-run)
+
+## `node-policy dependencies:add LOCATION`
+
+Adds dependency mappings for a location.
+
+```
+USAGE
+  $ node-policy dependencies:add LOCATION
+
+ARGUMENTS
+  LOCATION  desired location
+
+OPTIONS
+  -d, --discard            discards existing values for the resources
+  -p, --policy=policy      [default: /Users/bfarias/.node-policy.json] path of policy file
+  --dependency=dependency  (required) a dependency mapping, as JSON. e.g. --dependencies='{"fs":"node:fs"}'
+
+DESCRIPTION
+  Adds dependency mappings for a location.
+```
+
+_See code: [src/commands/dependencies/add.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/dependencies/add.js)_
+
+## `node-policy dependencies:summarize`
+
+Shows all fully resolved dependency URLs available when using a policy.
+
+```
+USAGE
+  $ node-policy dependencies:summarize
+
+OPTIONS
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
+
+DESCRIPTION
+  Shows all fully resolved dependency URLs available when using a policy.
+  * shows when a policy does not have a completely static resolution.
+```
+
+_See code: [src/commands/dependencies/summarize.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/dependencies/summarize.js)_
+
+## `node-policy dependencies:view LOCATION`
+
+Shows all dependency mappings for a location.
+
+```
+USAGE
+  $ node-policy dependencies:view LOCATION
+
+ARGUMENTS
+  LOCATION  desired location
+
+OPTIONS
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
+
+DESCRIPTION
+  Shows all dependency mappings for a location.
+```
+
+_See code: [src/commands/dependencies/view.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/dependencies/view.js)_
 
 ## `node-policy extract DESTINATION`
 
@@ -115,7 +178,7 @@ ARGUMENTS
 
 OPTIONS
   -a, --algorithm=(sha256|sha384|sha512)  (required) digest algorithm to use for integrity checks
-  -d, --discard                           discards other integrities for the resources
+  -d, --discard                           discards existing values for the resources
   -p, --policy=policy                     [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION

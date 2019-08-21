@@ -7,6 +7,11 @@
     },
     "bugs": "https://github.com/bmeck/node-policy/issues",
     "dependencies": {
+        "@babel/generator": "7.5.5",
+        "@babel/parser": "7.5.5",
+        "@babel/traverse": "7.5.5",
+        "@babel/types": "7.5.5",
+        "@bradleymeck/tofu": "1.1.0",
         "@oclif/command": "1.5.8",
         "@oclif/config": "1.10.4",
         "@oclif/plugin-help": "2.1.4",
@@ -22,8 +27,7 @@
         "@oclif/dev-cli": "1.21.0",
         "eslint": "5.12.0",
         "eslint-config-oclif": "3.1.0",
-        "globby": "8.0.1",
-        "jest": "23.6.0"
+        "globby": "8.0.1"
     },
     "engines": {
         "node": ">=8.0.0"

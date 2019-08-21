@@ -58,6 +58,7 @@ class IntegrityAddCommand extends Command {
           let seen = new Map();
           let alreadyExists = false;
           const integrityStr = policy.resources[location].integrity || '';
+          if (integrityStr === true) return;
           for (const existing of parseSRI(integrityStr)) {
             if (!seen.has(existing.algorithm)) {
               seen.set(existing.algorithm, new Set());
