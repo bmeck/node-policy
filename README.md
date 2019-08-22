@@ -43,6 +43,7 @@ USAGE
 * [`node-policy integrity:view LOCATION`](#node-policy-integrityview-location)
 * [`node-policy locate`](#node-policy-locate)
 * [`node-policy mv DESTINATION`](#node-policy-mv-destination)
+* [`node-policy resource:add LOCATION`](#node-policy-resourceadd-location)
 * [`node-policy run`](#node-policy-run)
 
 ## `node-policy dependencies:add LOCATION`
@@ -57,9 +58,8 @@ ARGUMENTS
   LOCATION  desired location
 
 OPTIONS
-  -d, --discard            discards existing values for the resources
-  -p, --policy=policy      [default: /Users/bfarias/.node-policy.json] path of policy file
-  --dependency=dependency  (required) a dependency mapping, as JSON. e.g. --dependencies='{"fs":"node:fs"}'
+  -d, --discard        discards existing values for the resources
+  -p, --policy=policy  [default: /Users/bfarias/.node-policy.json] path of policy file
 
 DESCRIPTION
   Adds dependency mappings for a location.
@@ -305,6 +305,28 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/mv.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/mv.js)_
+
+## `node-policy resource:add LOCATION`
+
+Adds integrity values for a location.
+
+```
+USAGE
+  $ node-policy resource:add LOCATION
+
+ARGUMENTS
+  LOCATION  desired location
+
+OPTIONS
+  -a, --algorithm=(sha256|sha384|sha512)  (required) digest algorithm to use for integrity checks
+  -d, --discard                           discards existing values for the resources
+  -p, --policy=policy                     [default: /Users/bfarias/.node-policy.json] path of policy file
+
+DESCRIPTION
+  Adds integrity values for a location.
+```
+
+_See code: [src/commands/resource/add.js](https://github.com/bmeck/node-policy/blob/v0.1.0/src/commands/resource/add.js)_
 
 ## `node-policy run`
 

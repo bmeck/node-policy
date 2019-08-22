@@ -7,12 +7,19 @@ module.exports = {
       name: 'algorithm',
       description: 'digest algorithm to use for integrity checks',
       required: true,
-      multiple: false,
       options: [
         'sha256',
         'sha384',
         'sha512',
       ]
+    });
+  },
+  get allNewlineForms() {
+    const {EOL} = require('os');
+    const otherEOL = EOL === '\n' ? '\r\n' : '\n';
+    return flags.boolean({
+      name: 'all-newline-forms',
+      description: `uses both the os native line ending format ${JSON.stringify(EOL)} and the alternative ${JSON.stringify(otherEOL)} for text files`
     });
   },
   get dependencies() {
